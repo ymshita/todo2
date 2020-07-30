@@ -13,6 +13,100 @@
 	th:href="@{/webjars/bootstrap/4.1.0/css/bootstrap.min.css}" />
 </head>
 <body>
+	<div class="container">
+		<div class="header clearfix">
+			<h3 class="text-muted">Spring Boot Todo App</h3>
+		</div>
+		<div class="jumbotron">
+			<h1>登録フォーム</h1>
+			<!-- change form by isNewTask -->
+			<!-- isNewTask = true -->
+			<form action="./tasks.html" method="post" th:if="${form.isNewTask}"
+				th:action="@{/tasks}">
+				<div class="form-row">
+					<div class="form-group col-md-8">
+						<label for="input-text-subject">タスク</label> <input type="text"
+							id="input-text-subject" class="form-control" required="required"
+							placeholder="やること" th:field="${form.subject}" />
+					</div>
+					<div class="form-group col-md-4">
+						<label for="input-date-deadline">期限</label> <input type="date"
+							class="form-control" required="required"
+							th:field="${form.deadLine}" id="input-date-deadline" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="form-check">
+						<input type="checkbox" id="gridCheck" class="form-chek-input"
+							th:field="${form.hasDone}" /> <label for="gridCheck"
+							class="form-check-label">完了チェック</label>
+					</div>
+				</div>
+				<button type="submit" class="btn btn-primary">登録</button>
+			</form>
+
+			<!-- isNewTask = false -->
+			<form action="./tasks.html" method="POST"
+				th:unless="${form.isNewTask}"
+				th:action="@{/tasks/{id}(id=${taskId})}">
+				<input type="hidden" name="_method" value="PUT" />
+				<div class="form-row">
+					<div class="form-group col-md-8">
+						<label for="input-text-subject">タスク</label> <input
+							class="form-control" type="text" id="input-text-subject"
+							required="required" placeholder="やること" th:field="$(form.subject)" />
+					</div>
+					<div class="form-group col-md-4">
+						<label for="input-date-deadline">期限</label><input type="date"
+							id="input-date-deadline" class="form-control" required="required"
+							th:field="${form.deadline}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="form-check">
+						<input type="checkbox" id="gridCheck" class="form-check-input"
+							th:field="${form.hasDone}" /> <label for="gridCheck"
+							class="form-check-label">完了チェック</label>
+					</div>
+				</div>
+				<button class="btn btn-success" type="submit">更新</button>
+				<a href="./tasks.html" class="btn btn-warning" type="button"
+					th:href="@{/tasks}">クリア</a>
+			</form>
+		</div>
+
+		<hr />
+
+		<h2>タスク一覧</h2>
+		<div class="table-responsive">
+			<table class="table table-condensed">
+				<thead>
+					<tr>
+						<th scope="col">タスク名</th>
+						<th scope="col">期限</th>
+						<th colspan="2">編集</th>
+					</tr>
+				</thead>
+				<tbody th:remove="all-but-first">
+					<tr th:each="task: ${tasks}"
+						th:class="${task.hasDone}? 'table-dark'">
+						<td th:text="${task.subject}">原稿の締め切り</td>
+						<td th:text="${task.deadLine}">2018-06-17</td>
+						<td><a type='button' href="./tasks.html" class="btn"
+							th:classappend="${task.hasDone}?'btn-light':'btn-success'"
+							th:href="@{/tasks/{id}(id=${task.id})}">編集</a></td>
+						<td><form action="./tasks.html}" method="post"
+								th:action="@{/tasks/{id}(id=${task.id})}">
+								<input type="hidden" name="_method" value="DELETE" /> <input
+									type="submit" class="btn"
+									th:classappend="${task.hasDone}?'btn-light':'btn-danger'"
+									value="削除" />
+							</form></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 	<script th:src="@{/webjars/jquery/3.0.0/jquery.min.js}"
 		src="./js/vendor/jquery-slim.min.js"></script>
 	<script th:src="@{/webjars/popper.js/1.14.1/popper.min.js}"
