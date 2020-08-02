@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import jp.ymshita.spring_todo.domain.Task;
@@ -26,17 +27,19 @@ public class TodoWebController {
 	@Autowired // to injection
 	TodoService todoService;
 
+	@ResponseBody
 	@GetMapping(value = "/tasks")
-	public ModelAndView readAllTasks() {
-		TaskForm initialForm = createInitialForm();
+	public String readAllTasks() {
+//		TaskForm initialForm = createInitialForm();
+//
+//		ModelAndView modelAndView = toTasksPage();
+//		modelAndView.addObject("form", initialForm);
+//
+//		List<Task> tasks = todoService.findAllTasks();
+//		modelAndView.addObject(TASKS, tasks);
 
-		ModelAndView modelAndView = toTasksPage();
-		modelAndView.addObject("form", initialForm);
-
-		List<Task> tasks = todoService.findAllTasks();
-		modelAndView.addObject(TASKS, tasks);
-
-		return modelAndView;
+//		return modelAndView;
+		return "{\"hoge\":\"fuga\"}";
 	}
 
 	@PostMapping(value = "/tasks")
